@@ -2,6 +2,8 @@
 
 react-leaflet-fallback is a plugin that provides a fallback tile layer implementation for [React Leaflet](https://react-leaflet.js.org/) maps. It allows you to load lower scaled tile images when originals are not found.
 
+This react-leaflet implementation is heavily referenced from the original implementation of fallback tile layers for leaflet by ghybs which can be reached from [here](https://github.com/ghybs/Leaflet.TileLayer.Fallback).
+
 ## Installation
 
 You can install the package via npm:
@@ -45,5 +47,5 @@ Contributions are welcome! If you find any issues or want to add new features, f
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the ISC License.
 

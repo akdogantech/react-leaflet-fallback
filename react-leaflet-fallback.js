@@ -38,15 +38,6 @@ L.TileLayer.Fallback = L.TileLayer.extend({
   
     _tileOnError: function (done, tile, e) {
       
-      console.log("tile-on-error is working now...\n")
-      console.log("original coords: ", originalCoords)
-      /*
-      console.log("current zoom level / fallback: \n", 
-        tile._fallbackZoom === undefined
-        ? originalCoords.z - 1
-        : tile._fallbackZoom - 1)
-*/
-      
       var layer = this,
         originalCoords = tile._originalCoords,
         currentCoords = (tile._currentCoords =
@@ -64,7 +55,6 @@ L.TileLayer.Fallback = L.TileLayer.extend({
           
       console.log("original coords: ", originalCoords)
         
-      //console.log("on-error is working now...")
   
       if (fallbackZoom < layer.options.minNativeZoom) {
         // Handle the specific case of z/0/0 differently
@@ -87,7 +77,7 @@ L.TileLayer.Fallback = L.TileLayer.extend({
   
       console.log("x, y, z coordinates after update: \n \d \n", currentCoords)
       
-      // Decrement fallbackZoom for the next iteration -- this solved everything -- defines and updates the fallbackzoom.
+      // Decrement fallbackZoom for the next iteration -- defines and updates the fallbackzoom.
       tile._fallbackZoom = fallbackZoom;
       
       newUrl = layer.getTileUrl(currentCoords);
