@@ -1,10 +1,9 @@
 import L from 'leaflet';
-import { useEffect } from 'react';
+import React from 'react';
+
+
 import {
-  useMap,
-  MapContainer,
-  TileLayer,
-  ZoomControl,
+  useMap,  
 } from "react-leaflet";
 
 
@@ -12,7 +11,7 @@ L.TileLayer.Fallback = L.TileLayer.extend({
     options: {
       minNativeZoom: 0
     },
-  
+
     initialize: function (urlTemplate, options) {
       L.TileLayer.prototype.initialize.call(this, urlTemplate, options);
     },
@@ -53,7 +52,7 @@ L.TileLayer.Fallback = L.TileLayer.extend({
         top,
         left;
           
-      console.log("original coords: ", originalCoords)
+      
         
   
       if (fallbackZoom < layer.options.minNativeZoom) {
@@ -75,7 +74,7 @@ L.TileLayer.Fallback = L.TileLayer.extend({
       currentCoords.x = Math.floor(currentCoords.x / 2);
       currentCoords.y = Math.floor(currentCoords.y / 2);
   
-      console.log("x, y, z coordinates after update: \n \d \n", currentCoords)
+      
       
       // Decrement fallbackZoom for the next iteration -- defines and updates the fallbackzoom.
       tile._fallbackZoom = fallbackZoom;
@@ -140,30 +139,39 @@ L.TileLayer.Fallback = L.TileLayer.extend({
   };
 
   
-  const FallbackTileLayer = (props) => {
+  const FallbackTileLayer = React.memo((props) => {
+    
     const { url, ...options } = props;
-    
     const map = useMap();
+    const fallbackTileLayerRef = React.useRef(null);
     
-    console.log("MAP VALUES IN FALLBACKTILELAYER: \n", map);
+
+
+    React.useMemo(() => {
+      if (!fallbackTileLayerRef.current) {
+        // Create the fallback tile layer using the factory function
+        const fallbackTileLayer = L.tileLayer.fallback(url, options);
+        fallbackTileLayerRef.current = fallbackTileLayer;
   
-    useEffect(() => {
-      // Create the fallback tile layer using the factory function
-      const fallbackTileLayer = L.tileLayer.fallback(url, options);
+        // Add the fallback tile layer to the Leaflet map
+        if (map && fallbackTileLayer) {
+          fallbackTileLayer.addTo(map);
+        } // Replace `map` with your Leaflet map instance
+      }
+    }, [url, options, map ]);
   
-      // Add the fallback tile layer to the Leaflet map
-      if (map && fallbackTileLayer) {
-        fallbackTileLayer.addTo(map);
-      } // Replace `map` with your Leaflet map instance
-  
+    React.useEffect(() => {
+      // Clean up: remove the fallback tile layer from the Leaflet map when the component is unmounted
       return () => {
-        // Clean up: remove the fallback tile layer from the Leaflet map
-        fallbackTileLayer.removeFrom(map); // Replace `map` with your Leaflet map instance
+        if (fallbackTileLayerRef.current) {
+          fallbackTileLayerRef.current.removeFrom(map);
+          fallbackTileLayerRef.current = null;
+        }
       };
-    }, [url, options]);
+    }, [map]);
   
     return null; // This component doesn't render any JSX, so return null
-  };
+  });
   
   export default FallbackTileLayer;
   
