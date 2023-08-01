@@ -1,6 +1,6 @@
 {
   "name": "react-leaflet-fallback",
-  "version": "1.0.8",
+  "version": "1.0.11",
   "description": "Plugin for React Leaflet. Replaces missing tiles by scaled lower zoom Tiles.",
   "main": "react-leaflet-fallback.js",
   "scripts": {
